@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% block title %}Home - AI Book Review{% endblock %}
+{% block content %}
+<h1>Book Reviews</h1>
+{% if reviews %}
+  <div class="list-group">
+    {% for review in reviews %}
+      <div class="list-group-item">
+        <h5>{{ review.book_title }} <small class="text-muted">by {{ review.author.username }}</small></h5>
+        <p>{{ review.review_text }}</p>
+        <p>Rating: {{ review.rating }}/5</p>
+        {% if session.get('user_id') == review.user_id %}
+          <a href="{{ url_for('edit_review', review_id=review.id) }}" class="btn btn-sm btn-primary">Edit</a>
+          <form action="{{ url_for('delete_review', review_id=review.id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Delete this review?');">
+            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+          </form>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <p>No reviews yet.</p>
+{% endif %}
+{% endblock %}

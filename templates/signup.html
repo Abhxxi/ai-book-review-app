@@ -1,8 +1,8 @@
 {% extends "layout.html" %}
-{% block title %}Login{% endblock %}
+{% block title %}Signup{% endblock %}
 {% block content %}
-<h2>Login</h2>
-<form method="POST" action="{{ url_for('login') }}">
+<h2>Signup</h2>
+<form method="POST" action="{{ url_for('signup') }}">
   <div class="mb-3">
     <label for="username" class="form-label">Username</label>
     <input type="text" name="username" class="form-control" required />
@@ -11,6 +11,6 @@
     <label for="password" class="form-label">Password</label>
     <input type="password" name="password" class="form-control" required />
   </div>
-  <button type="submit" class="btn btn-primary">Login</button>
+  <button type="submit" class="btn btn-primary">Signup</button>
 </form>
 {% endblock %}

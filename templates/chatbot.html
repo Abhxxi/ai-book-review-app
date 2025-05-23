@@ -1,25 +1,32 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <title>AI Book Suggestion Chatbot</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="container mt-5">
-  <h2>Book Suggestion Chatbot</h2>
-  <a href="{{ url_for('dashboard') }}" class="btn btn-link mb-3">Back to Dashboard</a>
+{% extends "layout.html" %}
+{% block title %}Chatbot{% endblock %}
+{% block content %}
+<h2>Book Suggestion Chatbot</h2>
+<div class="mb-3">
+  <textarea id="userMessage" class="form-control" rows="3" placeholder="Ask me for book suggestions..."></textarea>
+</div>
+<button id="sendBtn" class="btn btn-primary mb-3">Send</button>
+<div id="chatResponse" class="border p-3" style="min-height:100px;"></div>
 
-  <form method="POST">
-    <div class="mb-3">
-      <label>Ask me for a book suggestion (e.g., fantasy, sci-fi, classic)</label>
-      <input name="user_input" class="form-control" value="{{ user_input }}" required>
-    </div>
-    <button class="btn btn-primary" type="submit">Ask</button>
-  </form>
+<script>
+document.getElementById('sendBtn').addEventListener('click', () => {
+  const msg = document.getElementById('userMessage').value.trim();
+  if (!msg) return;
 
-  {% if suggestion %}
-  <div class="alert alert-info mt-3">
-    <strong>Suggestion:</strong> {{ suggestion }}
-  </div>
-  {% endif %}
-</body>
-</html>
+  fetch('/chatbot', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({message: msg})
+  })
+  .then(res => res.json())
+  .then(data => {
+    const chatDiv = document.getElementById('chatResponse');
+    chatDiv.innerText = data.response;
+  })
+  .catch(err => {
+    console.error(err);
+    alert('Error communicating with chatbot.');
+  });
+});
+</script>
+{% endblock %}
